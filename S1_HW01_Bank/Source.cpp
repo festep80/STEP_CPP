@@ -16,10 +16,11 @@ public:
 	void CreateAccount()
 	{
 		int pin1, pin2, switch_on;
+		const string fill = "0123456789";
 		srand(time(0));
 		for (int i = 0; i < 8; i++)
 		{
-			number[i]= rand() % 10;
+			number += fill[rand() % 10];
 		}
 		cout << "Number of your account is: " << number << endl;
 		do 
@@ -57,53 +58,56 @@ public:
 		balance = 0;
 
 	}
-	void GetBalance(string number)
-	{
-		if (number == this->number)
-		{
-			cout << "Your balance is: " << balance << " " << currency << endl;
-		}
-		else
-		{
-			cout << "Your data is incorrect. Try again." << endl;
-		}
-	}
+
 	void SetBalance(string number)
 	{
 		if (number == this->number)
-		{
-			cout << "Your balance is: " << balance << " " << currency << endl;
-			cout << "1.Add cash" << endl;
-			cout << "2.Withdraw cash" << endl;
-			int switch_on{}, cash;
-			switch (switch_on)
-			{
-			case 1:
-				cout << "Enter the amount of cash to add: ";
-				cin >> cash;
-				balance += cash;
-				cout << "Now your balance is: " << balance << " " << currency << endl;
-				break;
-			case 2:
-				do 
+		{			
+			bool flag = false;
+			do 
+			{				
+				cout << "1.Add cash" << endl;
+				cout << "2.Withdraw cash" << endl;
+				cout << "3.Show balance" << endl;
+				cout << "4.Exit" << endl;
+				int switch_on{}, cash;
+				cin >> switch_on;
+				switch (switch_on)
 				{
-					cout << "Enter the amount of cash to withdraw: ";
+				case 1:
+					cout << "Enter the amount of cash to add: ";
 					cin >> cash;
-					if (cash <= balance)
-					{
-						balance -= cash;
-						cout << "Now your balance is: " << balance << " " << currency << endl;
-					}
-					else
-					{
-						cout << "Your balance is less than your want to withdraw.\nTry again." << endl;
-					}
+					balance += cash;
 					cout << "Now your balance is: " << balance << " " << currency << endl;
-				} while (cash > balance);
-				break;
-			default:
-				break;
-			}
+					break;
+				case 2:
+					do
+					{
+						cout << "Enter the amount of cash to withdraw: ";
+						cin >> cash;
+						if (cash <= balance)
+						{
+							balance -= cash;
+							cout << "Now your balance is: " << balance << " " << currency << endl;
+						}
+						else
+						{
+							cout << "Your balance is less than your want to withdraw.\nTry again." << endl;
+						}						
+					} while (cash > balance);
+					break;
+				case 3:
+					cout << "Your balance is: " << balance << " " << currency << endl;
+					break;
+				case 4:
+					cout << "Goodbye!" << endl;
+					flag = true;
+				default:
+					cout << "Error choise. Try again." << endl;
+					break;
+				}
+			} while (flag == false);
+			
 		}
 		else
 		{
@@ -114,10 +118,10 @@ public:
 	{
 		
 		unsigned short pincode, untrue = 0;		
-		cout << "Enter PIN code: ";
-		cin >> pincode;
 		do
 		{ 
+			cout << "Enter PIN code: ";
+			cin >> pincode;
 			if (pincode == this->pincode)
 			{
 				return(number);
@@ -127,10 +131,11 @@ public:
 				cout << "PIN code is untrue. Try again." << endl;
 				untrue++;
 			}
-		} while (untrue < 4);
-		if (untrue >= 4)
+		} while (untrue < 3);
+		if (untrue >= 3)
 		{
 			cout << "Your account is blocked." << endl;
+			return string();
 		}
 	}
 	
@@ -142,7 +147,7 @@ int main()
 	firstAccount.CreateAccount();
 	string account_number = firstAccount.EnterPIN();	
 	firstAccount.SetBalance(account_number);
-	firstAccount.GetBalance(account_number);
+	
 	system("pause");
 	return 0;
 }
